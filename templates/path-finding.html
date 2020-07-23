@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Path Finding</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
+
+  <!-- local js -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/grid.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/button-functions.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/drag.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/control-button-functions.js') }}"></script>
+
+
+  <!-- local css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+  <!-- font awesome  -->
+  <script src="https://kit.fontawesome.com/f95fbf7eb5.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+  </defs>
+  <div id="svg-area" style="position:absolute"></div>
+  <button id="set-start-button" class="choice-buttons" onclick="setStart()" type="button">Set Start 🟩</button>
+  <button id="set-end-button" class="choice-buttons" onclick="setEnd()" type="button">Set End 🟥 </button>
+  <button id="set-block-button" class="choice-buttons" onclick="setBlocks()" type="button">Set Blocks ⬛</button>
+  <button id="set-erase-button" class="choice-buttons" onclick="setEraseBlocks()" type="button">Erase Blocks</button>
+  <button id="set-clear-button" class="choice-buttons" onclick="clearBlocks()" type="button">Clear all Blocks</button>
+
+  <div id="algorithms">
+    <div id="algorithmsheader">
+      <h4>Choose from here 😊</h4>
+    </div>
+    <div class="accordion" id="my-accordion">
+      <div>
+        <div id="headingOne">
+          <h5>
+            <button id="BFS" class="algo-button" type="button" onclick="removePorts()" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Breadth-First-Search
+            </button>
+          </h5>
+        </div>
+
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#my-accordion">
+          <div class="options">
+            <p>Options</p>
+            <input name="BFSoptions" type="checkbox" value="allow-diagonal" checked>
+            <label class="option-label">Allow diagonal ↗</label><br>
+
+            <input name="BFSoptions" type="checkbox" value="bi-directional">
+            <label class="option-label">Bi-directional → ←</label>
+          </div>
+        </div>
+      </div>
+
+      <!--  -->
+      <div>
+        <div id="headingTwo">
+          <h5>
+            <button id="Dijkstra" class="collapsed algo-button" onclick="removePorts()" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Dijkstra
+            </button>
+          </h5>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#my-accordion">
+          <div class="options">
+            <p>Options</p>
+            <input name="Dijkstraoptions" type="checkbox" value="allow-diagonal" checked>
+            <label class="option-label">Allow diagonal ↗</label><br>
+
+            <input name="Dijkstraoptions" type="checkbox" value="bi-directional">
+            <label class="option-label">Bi-directional → ←</label>
+          </div>
+        </div>
+      </div>
+
+      <!--  -->
+      <div>
+        <div id="headingThree">
+          <h5>
+            <button id="a-star" class="collapsed algo-button" onclick="removePorts()" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              A*
+            </button>
+          </h5>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#my-accordion">
+          <div class="options">
+            <p>Heuristic</p>
+            <input name="a-starheuristics" type="radio" value="manhattan" checked>
+            <label class="option-label">Manhattan</label><br>
+
+            <input name="a-starheuristics" type="radio" value="octile">
+            <label class="option-label">Octile</label><br>
+
+            <input name="a-starheuristics" type="radio" value="euclidean">
+            <label class="option-label">Euclidean</label><br>
+
+            <input name="a-starheuristics" type="radio" value="chebyshev">
+            <label class="option-label">Chebyshev</label>
+
+            <p>Options</p>
+            <input name="a-staroptions" type="checkbox" value="allow-diagonal" checked>
+            <label class="option-label">Allow diagonal ↗</label><br>
+
+            <input name="a-staroptions" type="checkbox" value="bi-directional">
+            <label class="option-label">Bi-directional → ←</label><br>
+
+            <input id="a-starweight" class="weight-box" name="a-staroptions" type="number" value="1" min="0">
+            <label class="option-label">Weight</label>
+          </div>
+        </div>
+      </div>
+
+      <!--  -->
+      <div>
+        <div id="headingFour">
+          <h5>
+            <button id="best-first" class="collapsed algo-button" onclick="removePorts()" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              Best-First-Search
+            </button>
+          </h5>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#my-accordion">
+          <div class="options">
+            <p>Heuristic</p>
+            <input name="best-firstheuristics" type="radio" value="manhattan" checked>
+            <label class="option-label">Manhattan</label><br>
+
+            <input name="best-firstheuristics" type="radio" value="octile">
+            <label class="option-label">Octile</label><br>
+
+            <input name="best-firstheuristics" type="radio" value="euclidean">
+            <label class="option-label">Euclidean</label><br>
+
+            <input name="best-firstheuristics" type="radio" value="chebyshev">
+            <label class="option-label">Chebyshev</label>
+
+            <p>Options</p>
+            <input name="best-firstoptions" type="checkbox" value="allow-diagonal" checked>
+            <label class="option-label">Allow diagonal ↗</label><br>
+
+            <input name="best-firstoptions" type="checkbox" value="bi-directional">
+            <label class="option-label">Bi-directional → ←</label><br>
+          </div>
+        </div>
+      </div>
+      <!--  -->
+      <hr>
+      <!--  -->
+      <div>
+        <div id="headingFive">
+          <h5>
+            <button id="Teleport" onclick="setInitialPorts()" class="collapsed algo-button" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+              Teleportation
+            </button>
+          </h5>
+        </div>
+        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#my-accordion">
+          <div class="options">
+            <p>Options</p>
+            <input name="Teleportoptions" type="checkbox" value="allow-diagonal" checked>
+            <label class="option-label">Allow diagonal ↗</label><br>
+
+            <button id="port-1-button" class="choice-buttons port-buttons" onclick="setPort1()" type="button">Set Port-1 🔵</button>
+            <button id="port-2-button" class="choice-buttons port-buttons" onclick="setPort2()" type="button">Set Port-2 🟣</button>
+            <span data-html="true" data-toggle="tooltip" data-placement="right" title="- We can enter one portal and exit another with no cost.<br><br>- They help reducing the pathLength.<br><br>- Portals may not be used, if there's a shortest path excluding them.">❗ NOTE</span>
+            <p style="margin-top: 20px;">For more info, click <a href="{{ url_for('static', filename='Mars-Rover-documentation-harish.pdf') }}">here</a>.</p>
+
+          </div>
+        </div>
+      </div>
+      
+      <!--  -->
+    </div>
+  </div>
+  <div id="control-panel">
+    <button id="start-button" class="choice-buttons" onclick="startSearch()"  type="button" data-toggle="tooltip" title="Start Search"><i class="fas fa-play"></i></button>
+    <button id="clear-path-button" class="choice-buttons" onclick="clearPath()" type="button" data-toggle="tooltip" title="Clear Grid"><i class="fas fa-broom"></i></button>
+    <button id="cancel-button" onclick="cancelSearch()" type="button" data-toggle="tooltip" title="Cancel Search">❌</button>
+  </div>
+
+  <div id="results"></div>
+  
+
+
+
+</body>
+
+</html>
