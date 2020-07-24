@@ -1,6 +1,7 @@
 // This file deals with the creation of Grid and some important tasks
 
 $(document).ready(function() {
+  $(window).on('load',function() {setTimeout(function () { $('html,body').scrollTop(0) },1); });
   $('[data-toggle="tooltip"]').tooltip();  
   //creating grid
   const svg1 = document. createElementNS("http://www.w3.org/2000/svg", "svg");
