@@ -7,3 +7,4 @@ Link to my web-app: https://harry9677.pythonanywhere.com/
 .css and .js files are in "static" folder|
 All finders and .py files(except `app.py`) are in "core" folder
 
+![](Mars-Rover-documentation-harish.pdf)
